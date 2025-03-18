@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import express from "express";
+import express, { Request, Response } from "express";
 import { BASE_USER_PORT } from "../config";
 
 export type SendMessageBody = {
@@ -18,6 +18,16 @@ export async function user(userId: number) {
   // TODO implement the status route
   _user.get("/status", (req, res) => {
     res.send("live");
+  });
+
+  _user.post("/message", (req: Request, res: Response) => {
+    const { message, destinationUserId }: SendMessageBody = req.body;
+
+    lastReceivedMessage = message;
+    console.log(`User ${userId} received message: ${message}`);
+    lastSentMessage = message;  
+
+    res.status(200).json({ message: "Message received successfully" });
   });
 
   _user.get("/getLastReceivedMessage",(req,res) => {
